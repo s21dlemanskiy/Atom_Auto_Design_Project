@@ -1,5 +1,7 @@
 env/*
+.ipynb_checkpoints/*
 *.csv
+*.xlsx
 1.txt
 *.exe
 *.log
