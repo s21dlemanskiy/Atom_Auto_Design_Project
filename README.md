@@ -19,6 +19,49 @@
 501 Not Implemented
 ```
 
+## MangoDB
+### автогенерация колекций MangoDB с данными
+если папка ```/mango/data_volume``` не существует, то генерация при запуске контейнера подет из скриптов ```/mango/init.d/init2data.sh``` и из ```/mango/init.d/init2data.sh```
+
+Ошибки генерации: могут возникнуть проблемы если ```/mango/init.d/init2data.sh``` переносит строки \r\n (CFLF) должно быть \n (LF) а так же не должно быть ENTRYPOINT инчае скрипты из директроии ```/docker-entrypoint-initdb.d/*``` (```/mango/init.d/*```) не будут исполнятся
+
+### структуры колекций
+texts:
+```
+ {'_id': ObjectId('663527550a04ef46f3d9d8b7'),
+  'text': 'текст',
+  'mark': 'марка автомобиля',
+  'model': 'можель афтоможиля',
+  'link': 'ссылка на оригинал ревью',
+  'body_type': 'тип кузова (SEDAN, LIFTBECK)',
+  'other_data': {
+   'source': 'тег источника например avito',
+   'text_sentiment': {'label': 'NEUTRAL', 'score': 1} - тональность текста,
+   Любая дополнительная инфрормация}} 
+```
+adjectives:
+```
+{'_id': ObjectId('663af9888bd70a05162bc586'),
+  'adjective': {'deprel': 'тип связи',
+   'word': 'исходная форма определения (прил)',
+   'lemma': 'лемма определения(прил)',
+   'start_char': начало слова,
+   'end_char': конец слова,
+   'negative': имеет ли не в связке с определением},
+  'key_word': {'deprel': 'тип связи',
+   'word': 'исходная форма слова (сущ)',
+   'lemma': 'лемма слова(сущ)',
+   'start_char': начало слова,
+   'end_char': конец слова,
+   'text_id': id текста откудо слово (связь с колекцией texts)}}
+```
+
+для этих колекций существубт класы, но я не рекомендую их использовать из соображений performance, лучше работать со словорями
+
+```
+backend.restAPI.app.modules.DataModels.Text
+backend.restAPI.app.modules.DataModels.Ajectives
+```
 # stanza description
 ### Pipline discription 
 
