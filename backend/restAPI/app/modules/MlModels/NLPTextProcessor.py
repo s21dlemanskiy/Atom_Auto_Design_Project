@@ -17,7 +17,7 @@ class DepparseTextProcessor():
     def get_lemma(word: str) -> str:
         nlp = stanza.Pipeline(lang='ru', processors='tokenize,lemma')
         result = nlp(word).to_dict()
-        if len(result) < 1 or len(result[0] < 1):
+        if len(result) < 1 or len(result[0]) < 1:
             error(f"{word} returns empty result while lemmatization: {result}")
             raise ValueError()
         return result[0][0]["lemma"]

@@ -59,9 +59,12 @@ class KeyWord(Word):
         text_id = data.pop("text_id")
         return super().from_dict(data, *args, text_id=text_id, **kwargs)
 
-    def to_dict(self):
+    def to_dict(self, id_to_string=False):
         result = super().to_dict()
-        result["text_id"] = self.text_id
+        if id_to_string:
+            result["text_id"] = str(self.text_id)
+        else:
+            result["text_id"] = self.text_id
         return result
 
 
@@ -108,11 +111,14 @@ class Adjective(BaseModel):
                     key_word=key_word,
                     adjective=adjective)
 
-    def to_dict(self, ignore_id=True):
-        adjective_dict = {"key_word": self.key_word.to_dict(),
+    def to_dict(self, id_to_string=False):
+        adjective_dict = {"key_word": self.key_word.to_dict(id_to_string=id_to_string),
                      "adjective": self.adjective.to_dict()}
-        if self.adjective_id is not None and not ignore_id:
-            adjective_dict["_id"] = self.adjective_id
+        if self.adjective_id is not None:
+            if id_to_string:
+                adjective_dict["_id"] = str(self.adjective_id)
+            else:
+                adjective_dict["_id"] = self.adjective_id
         return adjective_dict
 
     def __str__(self) -> str:

@@ -5,14 +5,14 @@ from logging import info, error
 
 from pymongo import MongoClient, collection, errors
 
-load_dotenv(find_dotenv())
+load_dotenv()
 
 
 class MangoDB:
     def __init__(self):
         self._collection = None
         self._session = None
-        self._client = MongoClient(getenv("MONGO_HOST"), getenv("MONGO_PORT"))
+        self._client = MongoClient(getenv("MONGO_HOST"), int(getenv("MONGO_PORT")))
         self._db = self._client[getenv("MONGO_DB")]
 
     def __enter__(self):
@@ -25,7 +25,7 @@ class MangoDB:
         return self
 
     def __exit__(self, exception_type, exception_value, exception_traceback):
-        self._session.__exit__()
+        self._session.__exit__(exception_type, exception_value, exception_traceback)
         self._session = None
         self._client.close()
 

@@ -1,5 +1,4 @@
 from fastapi import APIRouter
-from ..DAO.TextManager import TextManager
 from ..DAO.AdjectiveManager import AdjectiveManager
 from ..DAO.MangoDB import MangoDB
 from ..MlModels.Synonyms import WordnetAPI
@@ -8,19 +7,20 @@ from typing import List
 
 router = APIRouter(prefix="/search", tags=["search"], responses={400: {"description": "bed params"}})
 
-@router.get("/")
+@router.post("/")
 def search_by_words(words: List[str]):
     result = {}
     with MangoDB() as client:
         adjective_mg = AdjectiveManager(client)
-        adjectives = adjective_mg.get_adjectives_by_nouns(words)
-        for adj in adjectives:
-            if adj["text"]["_id"] not in result:
-                result[adj["text"]["_id"]] = []
-            result[adj["text"]["_id"]].append(adj)
+        map_texts_adjectives = adjective_mg.get_adjectives_by_nouns(words)
+        for text_id in map_texts_adjectives.keys():
+            result[text_id] = {}
+            result[text_id]["adjectives"] = list(map(lambda x: x.to_dict(id_to_string=True),
+                                                                   map_texts_adjectives[text_id]["adjectives"]))
+            result[text_id]["text"] = map_texts_adjectives[text_id]["text"].to_dict(ignore_id=True)
     return result
 
-@router.get("/synonims")
+@router.post("/synonims")
 def get_synonyms(word: str) -> List[str]:
     word_lemma = DepparseTextProcessor.get_lemma(word)
     wiki_wordnet = WordnetAPI()
