@@ -1,5 +1,6 @@
 env/*
 .ipynb_checkpoints/*
+backend/mongo/data_volume
 *.csv
 *.xlsx
 1.txt

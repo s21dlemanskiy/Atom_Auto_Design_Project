@@ -1,0 +1,32 @@
+
+
+version: "3"
+
+services:
+
+
+  mongodb:
+    build : mongo/
+    container_name: MongoDBContainer
+    restart: no
+    env_file:
+      - ./.env
+    ports:
+      - "27017:${MONGO_PORT}"
+    volumes:
+      - ./mongo/data_volume:/data/db
+
+
+  rest_api_app:
+    container_name: restAPIApp
+    restart: always
+    env_file:
+      - ./.env
+    build: restAPI/
+    ports:
+      - "${REST_API_OUTER_APP_PORT}:${REST_API_APP_PORT}"
+    volumes:
+      - .env:${APP_WORKING_DIR}/.env
+    depends_on:
+      - mongodb
+
