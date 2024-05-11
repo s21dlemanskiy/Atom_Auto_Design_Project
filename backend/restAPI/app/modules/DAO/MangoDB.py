@@ -1,4 +1,4 @@
-from os import getenv, path
+from os import getenv
 from dotenv import load_dotenv, find_dotenv
 
 from logging import info, error
@@ -9,14 +9,21 @@ load_dotenv()
 
 
 class MangoDB:
+    is_transaction_allow = False
     def __init__(self):
         self._collection = None
         self._session = None
+        # транзакции работают только на кластере MangoDB
+        # но не работают на stand-alone сервере без щардирования и резервно копирования
+        self.__class__.is_transaction_allow = getenv("ALLOW_MANGO_TRANSACTION", False)
+        #
         self._client = MongoClient(getenv("MONGO_HOST"), int(getenv("MONGO_PORT")))
         self._db = self._client[getenv("MONGO_DB")]
 
     def __enter__(self):
         self._session = self._client.start_session().__enter__()
+        if self.__class__.is_transaction_allow:
+            self._transaction = self._session.start_transaction().__enter__()
         try:
             self._db.command("serverStatus")
         except errors.ServerSelectionTimeoutError as e:
@@ -24,8 +31,10 @@ class MangoDB:
             raise ConnectionError()
         return self
 
-    def __exit__(self, exception_type, exception_value, exception_traceback):
-        self._session.__exit__(exception_type, exception_value, exception_traceback)
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self.__class__.is_transaction_allow:
+            self._transaction.__exit__(exc_type, exc_val, exc_tb)
+        self._session.__exit__(exc_type, exc_val, exc_tb)
         self._session = None
         self._client.close()
 
@@ -60,6 +69,9 @@ class MangoDB:
         return self._collection.update_one(*args, session=self._session, **kwargs)
 
     def abort_transaction(self):
+        if not self.__class__.is_transaction_allow:
+            errors("Can't abort transaction due to transaction not allowed")
+            return
         if self._session is None:
             raise ValueError("Bad use of MangoDB class (session is empty)"
                              " (please use it like: with MongoDB as client:..)")

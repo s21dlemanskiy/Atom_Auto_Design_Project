@@ -10,6 +10,8 @@ class AdjectiveManager:
         self._client = client
 
     def add_adjectives(self, adjectives: List[Dict[str, Any]]):
+        if len(adjectives) == 0:
+            return []
         self._client.get_collection("adjectives")
         result = self._client.insert_many(adjectives)
         info(f"Insert adjectives count:{len(result.inserted_ids)}")

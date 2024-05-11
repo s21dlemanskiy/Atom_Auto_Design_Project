@@ -1,11 +1,13 @@
 from ..DataModels.Text import Text
+from logging import info
 # from deeppavlov import configs, build_model
 
 class DeepavlovAPI():
-    @staticmethod
-    def install_model():
-        pass
+    @classmethod
+    def install_model(cls):
+        info(f"Start loading models for {cls.__name__}....")
         # build_model(configs.classifiers.rusentiment_convers_bert, download=True)
+        info(f"Loaded models for {cls.__name__}")
 
     # transformers
     # deeppavlov == 1.6.0

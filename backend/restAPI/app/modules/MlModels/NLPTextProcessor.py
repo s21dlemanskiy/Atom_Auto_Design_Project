@@ -1,9 +1,10 @@
 from ..DataModels.Text import Text
 import stanza
-from nltk.tokenize import word_tokenize, sent_tokenize
+from nltk.tokenize import sent_tokenize
+from nltk import download as nltk_download
 from typing import Set, List, Dict, Optional, Any
 from stanza.models.common.doc import Word, Sentence
-from logging import error
+from logging import error, info
 
 
 
@@ -22,9 +23,12 @@ class DepparseTextProcessor():
             raise ValueError()
         return result[0][0]["lemma"]
 
-    @staticmethod
-    def install_model():
+    @classmethod
+    def install_model(cls):
+        info(f"Start loading models for {cls.__name__}....")
         stanza.Pipeline(lang='ru', processors='tokenize,pos,lemma,ner,depparse')
+        nltk_download('punkt')
+        info(f"Loaded models for {cls.__name__}")
 
     @classmethod
     def my_to_dict(cls, word_entity, length: int, text: Optional[Text] = None):

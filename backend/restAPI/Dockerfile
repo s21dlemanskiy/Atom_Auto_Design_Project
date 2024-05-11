@@ -10,7 +10,7 @@ ADD ./requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Копируем файлы проекта в рабочую директорию
-COPY ./app/* ${APP_WORKING_DIR}
+COPY ./app/ .
 
 # Указываем что приложение на 8000 порту (без compose это просто коментарий)
 expose ${REST_API_APP_PORT}

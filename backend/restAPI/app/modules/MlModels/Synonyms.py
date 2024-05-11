@@ -1,6 +1,6 @@
 from wiki_ru_wordnet import WikiWordnet
 from typing import Optional, List
-from nltk.tokenize import word_tokenize, sent_tokenize
+from logging import info
 
 
 class WordnetAPI:
@@ -9,9 +9,11 @@ class WordnetAPI:
             wikiwordnet = WikiWordnet()
         self._wikiwordnet = wikiwordnet
 
-    @staticmethod
-    def install_model():
+    @classmethod
+    def install_model(cls):
+        info(f"Start loading models for {cls.__name__}....")
         WikiWordnet()
+        info(f"Loaded models for {cls.__name__}")
 
     def get_synonyms(self, word_lemma: str) -> List[str]:
         result = set()

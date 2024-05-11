@@ -5,6 +5,7 @@ from ..DataModels.Text import Text
 from ..MlModels.NLPTextProcessor import DepparseTextProcessor
 from ..MlModels.SentimentAnalys import DeepavlovAPI
 from ..DAO.MangoDB import MangoDB
+from logging import error
 
 router = APIRouter(prefix="/add_data", tags=["search"], responses={400: {"description": "bed params"}})
 
@@ -28,6 +29,8 @@ def add_text(text: Text):
 
             # insert ajectives in mongoDB
             resultset = AdjectiveManager(client).add_adjectives(adjectives)
+            return {"msg": f"Success", "adj_count":  len(list(resultset)), "text_id": str(text_id)}
         except Exception as e:
             client.abort_transaction()
+            error(f"An exception occurred: Input_data: {text.to_dict()}, Exception:{e}")
             raise e

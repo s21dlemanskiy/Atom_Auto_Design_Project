@@ -1,0 +1,175 @@
+openapi: 3.0.0
+info:
+  title: FastAPI
+  version: 0.1.0
+paths:
+  /add_data/text:
+    post:
+      tags:
+        - search
+      summary: Add Text
+      operationId: add_text_add_data_text_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Text'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: bed params
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /search/:
+    post:
+      tags:
+        - search
+      summary: Search By Words
+      operationId: search_by_words_search__post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              items:
+                type: string
+              type: array
+              title: Words
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: bed params
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /search/synonims:
+    post:
+      tags:
+        - search
+      summary: Get Synonyms
+      operationId: get_synonyms_search_synonims_post
+      parameters:
+        - name: word
+          in: query
+          required: true
+          schema:
+            type: string
+            title: Word
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                title: Response Get Synonyms Search Synonims Post
+        '400':
+          description: bed params
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /:
+    get:
+      summary: Read Root
+      operationId: read_root__get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /ping:
+    get:
+      summary: Read Root
+      operationId: read_root_ping_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    Text:
+      properties:
+        text:
+          type: string
+          title: Text
+        mark:
+          type: string
+          title: Mark
+        model:
+          type: string
+          title: Model
+        link:
+          type: string
+          title: Link
+        body_type:
+          type: string
+          title: Body Type
+        other_data:
+          type: object
+          title: Other Data
+        text_id:
+          type: object
+          title: Text Id
+      type: object
+      required:
+        - text
+        - mark
+        - model
+        - link
+        - body_type
+        - other_data
+      title: Text
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+              - type: string
+              - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+        - loc
+        - msg
+        - type
+      title: ValidationError
