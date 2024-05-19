@@ -12,6 +12,7 @@ load_dotenv(find_dotenv())
 app = FastAPI()
 
 origins = [
+    "*",
     "http://localhost:80",
     "http://localhost",
     f"https://localhost:{getenv('REST_API_OUTER_APP_PORT', 5000)}",

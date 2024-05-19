@@ -1,0 +1,45 @@
+/* Стиль для контейнера выпадающего списка */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Стиль для кнопки */
+.dropbtn {
+    background-color: #4CAF50; /* Зеленый фон */
+    color: white; /* Белый цвет текста */
+    padding: 10px 20px; /* Внутренние отступы */
+    font-size: 16px; /* Размер шрифта */
+    border: none; /* Убираем рамку */
+    cursor: pointer; /* Указатель при наведении */
+    border-radius: 5px; /* Скругленные углы */
+    transition: background-color 0.3s; /* Плавный переход */
+}
+
+/* Изменение цвета кнопки при наведении */
+.dropbtn:hover {
+    background-color: #45a049;
+}
+
+/* Контент выпадающего списка (скрытый по умолчанию) */
+.dropdownContent {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    padding: 12px 16px;
+    z-index: 1;
+    border-radius: 5px;
+}
+
+/* Показать контент выпадающего списка при активном состоянии */
+.dropdown .dropdownContent {
+    display: block;
+}
+
+/* Стиль для меток с чекбоксами */
+.dropdownContent label {
+    display: block;
+    padding: 5px 0;
+}

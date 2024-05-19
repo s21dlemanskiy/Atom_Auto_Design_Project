@@ -20,7 +20,8 @@ def search_by_words(words: List[str]):
             result[text_id]["text"] = map_texts_adjectives[text_id]["text"].to_dict(ignore_id=True)
     return result
 
-@router.post("/synonims")
+
+@router.get("/synonims")
 def get_synonyms(word: str) -> List[str]:
     word_lemma = DepparseTextProcessor.get_lemma(word)
     wiki_wordnet = WordnetAPI()
