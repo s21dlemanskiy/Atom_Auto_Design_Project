@@ -53,11 +53,8 @@ function TextTile({text}: {text: Text}) {
 }, Array<{start:number, end:number}>());
 highlights.sort((highlight1, highlight2) => highlight1.start - highlight2.start);
 let start_short_text = Math.max(0, highlights.length > 0 ? highlights[0].start - 30: 0);
-while (start_short_text < main_text.length - 1 && !sign_set.has(main_text[start_short_text++])) {
-}
-if (start_short_text == main_text.length) {
-    start_short_text = 0
-}
+// eslint-disable-next-line no-empty
+while (start_short_text > 0 && !sign_set.has(main_text[start_short_text--])) {}
 const sentiment = text.text.other_data.text_sentiment.label.toLowerCase();
 const get_sentiment = function (sentiment) {
     switch (sentiment) {

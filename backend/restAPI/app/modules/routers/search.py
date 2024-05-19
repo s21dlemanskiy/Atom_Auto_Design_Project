@@ -26,4 +26,6 @@ def get_synonyms(word: str) -> List[str]:
     word_lemma = DepparseTextProcessor.get_lemma(word)
     wiki_wordnet = WordnetAPI()
     synonyms = wiki_wordnet.get_synonyms(word_lemma)
+    if (word.lower() not in synonyms):
+        synonyms.append(word.lower())
     return synonyms
