@@ -1,6 +1,9 @@
 # Atom_Auto_Design_Project
  I-II 2024 project
 
+# Deploy
+``` git clone https://github.com/s21dlemanskiy/Atom_Auto_Design_Project.git --depth 1 --branch=main ```
+
 # про структуру API и DEVOPS
 ## немного про env
 проект содежит только один env файл в корне, для модулей подключается он же, причем не только для dockerfile модулей но и для например питоновского конфига. Поэтому если нужно добавить какую либо перемную в env нужно ее сначала добаить в .env.example а после в .env в корне проекта
