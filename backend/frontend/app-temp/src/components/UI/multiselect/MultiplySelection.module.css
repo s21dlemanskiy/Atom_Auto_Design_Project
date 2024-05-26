@@ -1,27 +1,7 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-}
-
-.dropdown-list {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.dropdown-item {
-    width: 300px; /* Ширина каждого элемента */
-}
-
-.dropdown-item h3 {
-    margin-bottom: 5px;
-}
-
 /* Стиль для контейнера выпадающего списка */
 .dropdown {
     position: relative;
     display: inline-block;
-    width: 100%;
 }
 
 /* Стиль для кнопки */
@@ -34,8 +14,6 @@ body {
     cursor: pointer; /* Указатель при наведении */
     border-radius: 5px; /* Скругленные углы */
     transition: background-color 0.3s; /* Плавный переход */
-    width: 100%;
-    text-align: left; /* Выравнивание текста по левому краю */
 }
 
 /* Изменение цвета кнопки при наведении */
@@ -44,19 +22,24 @@ body {
 }
 
 /* Контент выпадающего списка (скрытый по умолчанию) */
-.dropdown-content {
+.dropdownContent {
     display: none;
     position: absolute;
     background-color: white;
-    min-width: 100%;
+    min-width: 160px;
     box-shadow: 0 8px 16px rgba(0,0,0,0.2);
     padding: 12px 16px;
     z-index: 1;
     border-radius: 5px;
 }
 
+/* Показать контент выпадающего списка при активном состоянии */
+.dropdown .dropdownContent {
+    display: block;
+}
+
 /* Стиль для меток с чекбоксами */
-.dropdown-content label {
+.dropdownContent label {
     display: block;
     padding: 5px 0;
 }
