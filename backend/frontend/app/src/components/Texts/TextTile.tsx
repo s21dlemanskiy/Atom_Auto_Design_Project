@@ -3,6 +3,7 @@ import { Text } from './types';
 import classes from './Texts.module.css';
 import ExtraButton from './../UI/button/ExtraButton';
 
+
 const HighlightText = ({ text, highlights }: {text:string, highlights: {start: number, end:number}[]}) => {
     let lastIndex = 0;
     const parts = [];
@@ -56,7 +57,7 @@ let start_short_text = Math.max(0, highlights.length > 0 ? highlights[0].start -
 // eslint-disable-next-line no-empty
 while (start_short_text > 0 && !sign_set.has(main_text[start_short_text--])) {}
 const sentiment = text.text.other_data.text_sentiment.label.toLowerCase();
-const get_sentiment = function (sentiment) {
+const get_sentiment = function (sentiment: string) {
     switch (sentiment) {
         case "positive": 
             return "Позитивный";
@@ -68,7 +69,7 @@ const get_sentiment = function (sentiment) {
             return sentiment;
     }
 }
-const get_sentiment_clasname = function (sentiment) {
+const get_sentiment_clasname = function (sentiment: string) {
     switch (sentiment) {
         case "positive": 
             return classes.positive;

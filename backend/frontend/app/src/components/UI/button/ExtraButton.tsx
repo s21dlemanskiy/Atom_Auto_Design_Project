@@ -1,12 +1,16 @@
-import React, { MouseEventHandler } from 'react';
+import React, { FC }from 'react';
 import classes from './ExtraButton.module.css';
 
-type InputType = {
-    text: string;
-    func: MouseEventHandler<HTMLButtonElement>;
-}
+type InputType = { text: string; }
+type InputTypeWithProps = InputType & React.HTMLAttributes<HTMLButtonElement>;
 
-function ExtraButton({text, ...props}:InputType) {
+// function ExtraButton ({text, ...props}) {
+//   return (
+//     <button {...props} className={classes.extraButton}>{text}</button>
+//   )
+// }
+
+const ExtraButton: FC<InputTypeWithProps> = function ExtraButton ({text, ...props}) {
   return (
     <button {...props} className={classes.extraButton}>{text}</button>
   )

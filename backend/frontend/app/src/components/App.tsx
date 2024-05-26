@@ -1,19 +1,21 @@
 import React from 'react';
 import { useState } from 'react';
-import { RawData } from './Texts/types';
+// import { RawData } from './Texts/types';
 import SearchComp from './SearchComp';
 import MyButton from './UI/button/MyButton';
-import ExtraButton from './UI/button/ExtraButton';
+// import ExtraButton from './UI/button/ExtraButton';
 import axios from 'axios';
+import { RawData } from './Texts/types';
 
 const host = "http://127.0.0.1";
 const port = "5000";
 function App() {
-  let data_example: RawData;
+  // let data_example: RawData = {};
   const defaultSearchWord = "машина";
   const [searchWord, setSearchWord] = useState(defaultSearchWord);
-  const [texts, setTexts] = useState(data_example);
-  const updateWordValue = (evt) => setSearchWord(evt.target.value);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [texts, setTexts] = useState({} as RawData);
+  const updateWordValue = (evt: { target: { value: React.SetStateAction<string>; }; }) => setSearchWord(evt.target.value);
   // fetch('./DataExample.json')
   //   .then((response) => response.json()).then((json) => {data_example = json});, 
       // { params: { word: searchWord.toString() } 

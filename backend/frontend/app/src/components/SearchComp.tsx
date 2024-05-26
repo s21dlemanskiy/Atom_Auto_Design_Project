@@ -5,11 +5,11 @@ import ExtraButton from './UI/button/ExtraButton';
 import MultiplySelection from './UI/multiselect/MultiplySelection';
 import TextsList from './Texts/TextsList';
 import getFilters from './utils/getFiltersFromTexts';
-import { RawData } from './Texts/types';
 import classes from './SearchComp.module.css';
 import AdjectiveSummary from './Summary/AdjectiveSummary';
+import { RawData } from './Texts/types';
 
-function SearchComp({texts}) {
+function SearchComp({texts}: RawData) {
     const [available_words, available_sources, available_marks, available_models, available_body_types] = getFilters(texts);
     const [words, setWords] = useState(new Set([...available_words]));
     const [sources, setSources] = useState(new Set([...available_sources]));
@@ -25,11 +25,15 @@ function SearchComp({texts}) {
     //     setModels(models)
     //   }
     useEffect(() => {
+        // setMarks(new Set([...available_marks]));
+        // setBodyTypes(new Set([...available_body_types]));
+        // setModels(new Set([...available_models]))
+        setMarks(new Set([]));
+        setBodyTypes(new Set([]));
+        setModels(new Set([]))
+
         setWords(new Set([...available_words]));
         setSources(new Set([...available_sources]));
-        setMarks(new Set([...available_marks]));
-        setBodyTypes(new Set([...available_body_types]));
-        setModels(new Set([...available_models]))
       }, [texts]);
     // setWords(new Set([...available_words]));
     return (
@@ -37,18 +41,6 @@ function SearchComp({texts}) {
         { 0 < Math.min(available_words.size, available_sources.size, available_marks.size, available_models.size, available_body_types.size) ?
         <div>
             <div id='TextFitlers' className={classes["dropdown-list"]}>
-                <div className={classes["dropdown-item"]}>
-                    <h3>Выбор синонимов</h3>
-                    <div className={classes["dropdown"]}>
-                        <MultiplySelection id="wordsFilter" func={(e) => console.log(e)} options={available_words} selected_options={words} updateSelected={setWords} name_map={{}}/>
-                    </div>
-                </div>
-                <div className={classes["dropdown-item"]}>
-                    <h3>Выбор источника</h3>
-                    <div className={classes["dropdown"]}>
-                    <MultiplySelection func={(e) => console.log(e)} options={available_sources} selected_options={sources} updateSelected={setSources} name_map={{}} />
-                    </div>
-                </div>
                 <div className={classes["dropdown-item"]}>
                     <h3>Выбор марок</h3>
                     <div className={classes["dropdown"]}>
@@ -67,7 +59,20 @@ function SearchComp({texts}) {
                     <MultiplySelection func={(e) => console.log(e)} options={available_body_types} selected_options={body_types} updateSelected={setBodyTypes} name_map={{}} />
                     </div>
                 </div>
+                <div className={classes["dropdown-item"]}>
+                    <h3>Выбор синонимов</h3>
+                    <div className={classes["dropdown"]}>
+                        <MultiplySelection id="wordsFilter" func={(e) => console.log(e)} options={available_words} selected_options={words} updateSelected={setWords} name_map={{}}/>
+                    </div>
+                </div>
+                <div className={classes["dropdown-item"]}>
+                    <h3>Выбор источника</h3>
+                    <div className={classes["dropdown"]}>
+                    <MultiplySelection func={(e) => console.log(e)} options={available_sources} selected_options={sources} updateSelected={setSources} name_map={{}} />
+                    </div>
+                </div>
             </div>
+            <p>Самые часто встречаемые определения отсортированные по убыванию частоты появления в текстах:</p>
             <div id="AdjectiveSummary">
                 <AdjectiveSummary texts={texts} words={words} sources={sources} marks={marks} models={models} body_types={body_types} />
             </div>
