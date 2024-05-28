@@ -10,6 +10,7 @@ load_dotenv()
 
 class MangoDB:
     is_transaction_allow = False
+
     def __init__(self):
         self._collection = None
         self._session = None
@@ -25,7 +26,7 @@ class MangoDB:
         if self.__class__.is_transaction_allow:
             self._transaction = self._session.start_transaction().__enter__()
         try:
-            self._db.command("serverStatus")
+            self._db.command("ping")
         except errors.ServerSelectionTimeoutError as e:
             error(f"Can't access to server with {self}")
             raise ConnectionError()
@@ -39,36 +40,42 @@ class MangoDB:
         self._client.close()
 
     def insert_one(self, *args, **kwargs):
+        info(f"Insert one in Mango {args}")
         if self._session is None or self._collection is None:
             raise ValueError("Bad use of MangoDB class (session or collection is empty)"
                              " (please use it like: with MongoDB as client:..)")
         return self._collection.insert_one(*args, session=self._session, **kwargs)
 
     def insert_many(self, *args, **kwargs):
+        info(f"Insert many in Mango (count:{len(args)})")
         if self._session is None or self._collection is None:
             raise ValueError("Bad use of MangoDB class (session or collection is empty)"
                              " (please use it like: with MongoDB as client:..)")
         return self._collection.insert_many(*args, session=self._session, **kwargs)
 
     def find(self, *args, **kwargs):
+        info(f"Find in Mango (args:{args}, kwargs:{kwargs})")
         if self._session is None or self._collection is None:
             raise ValueError("Bad use of MangoDB class (session or collection is empty)"
                              " (please use it like: with MongoDB as client:..)")
         return self._collection.find(*args, session=self._session, **kwargs)
 
     def find_one(self, *args, **kwargs):
+        info(f"Find one in Mango (args:{args}, kwargs:{kwargs})")
         if self._session is None or self._collection is None:
             raise ValueError("Bad use of MangoDB class (session or collection is empty)"
                              " (please use it like: with MongoDB as client:..)")
         return self._collection.find_one(*args, session=self._session, **kwargs)
 
     def update_one(self, *args, **kwargs):
+        info(f"Update one in Mango (args:{args}, kwargs:{kwargs})")
         if self._session is None or self._collection is None:
             raise ValueError("Bad use of MangoDB class (session or collection is empty)"
                              " (please use it like: with MongoDB as client:..)")
         return self._collection.update_one(*args, session=self._session, **kwargs)
 
     def abort_transaction(self):
+        info(f"Process abort Mongo transaction")
         if not self.__class__.is_transaction_allow:
             errors("Can't abort transaction due to transaction not allowed")
             return
@@ -77,8 +84,8 @@ class MangoDB:
                              " (please use it like: with MongoDB as client:..)")
         self._session.abort_transaction()
 
-
     def get_collection(self, collection: str) -> collection.Collection:
+        info(f"Get collection {collection}")
         self._collection = self._db[collection]
 
     def __str__(self):

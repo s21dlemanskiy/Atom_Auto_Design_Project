@@ -19,10 +19,10 @@ function App() {
   // fetch('./DataExample.json')
   //   .then((response) => response.json()).then((json) => {data_example = json});, 
       // { params: { word: searchWord.toString() } 
-  const updateTexts = function () {axios.get(`${host}:${port}/search/synonims`, { params: { word: searchWord.toString() } }
+  const updateTexts = function () {axios.get(`${host}:${port}/api/search/synonims`, { params: { word: searchWord.toString() } }
 ).then(function (response) {
         console.log(response.data);
-        axios.post(`${host}:${port}/search`, response.data).then(function (response) {
+        axios.post(`${host}:${port}/api/search`, response.data).then(function (response) {
             setTexts(response.data);
           })
           .catch(function (error) {

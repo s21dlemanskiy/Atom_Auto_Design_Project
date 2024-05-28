@@ -8,7 +8,6 @@ services:
   mongodb:
     build : mongo/
     container_name: MongoDBContainer
-    restart: no
     env_file:
       - ./.env
     ports:
