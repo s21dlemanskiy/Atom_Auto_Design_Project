@@ -7,8 +7,9 @@ import MyButton from './UI/button/MyButton';
 import axios from 'axios';
 import { RawData } from './Texts/types';
 
-const host = "http://127.0.0.1";
-const port = "5000";
+const host = window.location.hostname;
+const protocol = window.location.protocol;
+const port = "80";
 function App() {
   // let data_example: RawData = {};
   const defaultSearchWord = "машина";
@@ -19,10 +20,10 @@ function App() {
   // fetch('./DataExample.json')
   //   .then((response) => response.json()).then((json) => {data_example = json});, 
       // { params: { word: searchWord.toString() } 
-  const updateTexts = function () {axios.get(`${host}:${port}/api/search/synonims`, { params: { word: searchWord.toString() } }
+  const updateTexts = function () {axios.get(`${protocol}//${host}:${port}/api/search/synonims`, { params: { word: searchWord.toString() } }
 ).then(function (response) {
         console.log(response.data);
-        axios.post(`${host}:${port}/api/search`, response.data).then(function (response) {
+        axios.post(`${protocol}//${host}:${port}/api/search/`, response.data).then(function (response) {
             setTexts(response.data);
           })
           .catch(function (error) {

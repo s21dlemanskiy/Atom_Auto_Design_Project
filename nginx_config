@@ -2,7 +2,7 @@ server {
 listen 80;
 server_name YOUR_SERVER_IP;
 
-root /www/data/dist;
+root /www/data;
 index index.html;
 
 location / {
