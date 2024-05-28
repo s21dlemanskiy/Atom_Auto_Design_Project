@@ -2,7 +2,51 @@
  I-II 2024 project
 
 # Deploy
+[get_ssh]: # (cat ~/.ssh/id_rsa.pub)
 ``` git clone https://github.com/s21dlemanskiy/Atom_Auto_Design_Project.git --depth 1 --branch=main ```
+[copy frontend]: # (sudo cp -r ./dist/ /www/data)
+[set permision]: #(sudo chown -R www-data:www-data /home/koly/Atom_Auto_Design_Project/backend/frontend/app-temp/dist)
+[set permision]: #(sudo chmod -R 755 /home/koly/Atom_Auto_Design_Project/backend/frontend/app-temp/dist)
+[copy nginx connfig]: #(sudo cp ./nginx_config /etc/nginx/sites-available/atom_auto_design)
+[copy nginx connfig]: #(sudo ln -s /etc/nginx/sites-available/atom_auto_design /etc/nginx/sites-enabled/)
+[copy frontend]: # (sudo cp -r ./dist/ /www/data)
+[restart nginx]: # (sudo systemctl restart nginx)
+
+[install npm](https://nodejs.org/en/download/package-manager)
+
+install docker 
+```
+sudo apt-get update
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+copy env
+```
+cp .env.example .env
+```
+```
+# installs nvm (Node Version Manager)
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+# download and install Node.js
+nvm install 20
+# verifies the right Node.js version is in the environment
+node -v # should print `v20.13.1`
+# verifies the right NPM version is in the environment
+npm -v
+```
+install docker-compose 
+
 
 # про структуру API и DEVOPS
 ## немного про env
