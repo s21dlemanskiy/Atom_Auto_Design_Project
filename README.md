@@ -2,7 +2,72 @@
  I-II 2024 project
 
 # Deploy
-``` git clone https://github.com/s21dlemanskiy/Atom_Auto_Design_Project.git --depth 1 --branch=main ```
+get ssh key
+` cat ~/.ssh/id_rsa.pub `
+
+download project:
+` git clone https://github.com/s21dlemanskiy/Atom_Auto_Design_Project.git --depth 1 --branch=main `
+
+[install npm](https://nodejs.org/en/download/package-manager)
+```
+# installs nvm (Node Version Manager)
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+# download and install Node.js
+nvm install 20
+# verifies the right Node.js version is in the environment
+node -v # should print `v20.13.1`
+# verifies the right NPM version is in the environment
+npm -v
+```
+
+build project 
+```
+npm install
+npm run build
+```
+
+copy frontend to nginx:
+` sudo cp -r ./dist/ /www/data `
+set permisions for nginx dir 
+```
+sudo chown -R www-data:www-data /home/koly/Atom_Auto_Design_Project/backend/frontend/app-temp/dist
+sudo chmod -R 755 /home/koly/Atom_Auto_Design_Project/backend/frontend/app-temp/dist
+```
+connfigurate nginx
+```
+sudo cp ./nginx_config /etc/nginx/sites-available/atom_auto_design
+sudo ln -s /etc/nginx/sites-available/atom_auto_design /etc/nginx/sites-enabled/
+```
+restart nginx:
+` sudo systemctl restart nginx `
+
+
+install docker 
+```
+sudo apt-get update
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+copy env
+```
+cp .env.example .env
+```
+run docker
+```
+sudo docker compose up -d
+```
+
 
 # про структуру API и DEVOPS
 ## немного про env
