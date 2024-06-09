@@ -25,14 +25,19 @@ function App() {
         console.log(response.data);
         axios.post(`${protocol}//${host}:${port}/api/search/`, response.data).then(function (response) {
             setTexts(response.data);
+            if (Object.keys(response.data).length == 0) {
+              alert("Ничего не найдено");
+            }
           })
           .catch(function (error) {
             console.log("response2");
+            alert("ошбка связи с бекедом");
             console.log(error);
           })
       })
       .catch(function (error) {
         console.log("response1");
+        alert("ошбка связи с бекедом");
         console.log(error);
       });
     }

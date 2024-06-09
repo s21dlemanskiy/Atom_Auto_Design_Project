@@ -36,12 +36,17 @@ class AdjectiveManager:
             result[str(text_id)] = {"adjectives": [adj], "text": text}
         return result
 
-    def get_adjectives_by_nouns(self, noun_lemmas: List[str]) -> Dict[str, Dict[str, Union[List[Adjective], Text]]]:
+    def get_adjectives_by_nouns(self, noun_lemmas: List[str],
+                                marks: List[str]=None,
+                                models: List[str]=None,
+                                bodys: List[str]=None) -> Dict[str, Dict[str, Union[List[Adjective], Text]]]:
         result = {}
         self._client.get_collection("adjectives")
         noun_lemmas = list(map(lambda x: x.lower(), noun_lemmas))
-        result_set = self._client.find({"key_word.lemma": {"$in": noun_lemmas}})
+        query = {"key_word.lemma": {"$in": noun_lemmas}}
+        result_set = self._client.find(query)
         self._client.get_collection("texts")
+        adj_skiped_count = 0
         for adj in result_set:
             adj: Adjective = Adjective.from_dict(adj)
             text_id = adj.key_word.text_id
@@ -53,5 +58,15 @@ class AdjectiveManager:
                 info(f"No text with id {text_id}. Adjectives from this text skiped")
                 continue
             text: Text = Text.from_dict(text)
+            if marks is not None and text.mark not in marks:
+                adj_skiped_count += 1
+                continue
+            if models is not None and text.model not in models:
+                adj_skiped_count += 1
+                continue
+            if bodys is not None and text.body not in bodys:
+                adj_skiped_count += 1
+                continue
             result[str(text_id)] = {"adjectives": [adj], "text": text}
+        info(f"Skiped {adj_skiped_count} adjective, in fact of discrepancy with input params (mark, model, body))")
         return result
