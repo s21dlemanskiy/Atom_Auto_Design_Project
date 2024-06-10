@@ -10,6 +10,11 @@ services:
     container_name: MongoDBContainer
     env_file:
       - ./.env
+    environment:
+      - MONGO_USER=$MONGO_USER
+      - MONGO_PASSWORD=$MONGO_PASSWORD
+      - MONGO_DB=$MONGO_DB
+      - MONGO_PORT=$MONGO_PORT
     ports:
       - "27017:${MONGO_PORT}"
     volumes:
@@ -21,11 +26,12 @@ services:
     restart: always
     env_file:
       - ./.env
+    environment:
+      - APP_WORKING_DIR=$APP_WORKING_DIR
+      - REST_API_APP_PORT=$REST_API_APP_PORT
     build: restAPI/
     ports:
       - "${REST_API_OUTER_APP_PORT}:${REST_API_APP_PORT}"
-    volumes:
-      - .env:${APP_WORKING_DIR}/.env
     depends_on:
       - mongodb
 

@@ -64,9 +64,9 @@ class AdjectiveManager:
             if models is not None and text.model not in models:
                 adj_skiped_count += 1
                 continue
-            if bodys is not None and text.body not in bodys:
+            if bodys is not None and text.body_type not in bodys:
                 adj_skiped_count += 1
                 continue
             result[str(text_id)] = {"adjectives": [adj], "text": text}
-        info(f"Skiped {adj_skiped_count} adjective, in fact of discrepancy with input params (mark, model, body))")
+        info(f"Skiped {adj_skiped_count} adjective, in fact of unsatisfying input params (mark, model, body))")
         return result

@@ -4,7 +4,6 @@ FROM python:3.11.5
 # Устанавливаем рабочую директорию в контейнере
 WORKDIR ${APP_WORKING_DIR}
 
-
 # Устанавливаем зависимости
 ADD ./requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
