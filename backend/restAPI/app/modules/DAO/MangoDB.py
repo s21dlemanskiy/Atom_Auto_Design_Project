@@ -4,6 +4,7 @@ from dotenv import load_dotenv, find_dotenv
 from logging import info, error
 
 from pymongo import MongoClient, collection, errors
+from pymongo.server_api import ServerApi
 
 load_dotenv()
 
@@ -17,8 +18,10 @@ class MangoDB:
         # транзакции работают только на кластере MangoDB
         # но не работают на stand-alone сервере без щардирования и резервно копирования
         self.__class__.is_transaction_allow = getenv("ALLOW_MANGO_TRANSACTION", False)
+        uri = f"mongodb+srv://{getenv('MONGO_USER')}:{getenv('MONGO_PASSWORD')}@cluster0.necu0bw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
         #
-        self._client = MongoClient(getenv("MONGO_HOST"), int(getenv("MONGO_PORT")))
+        # self._client = MongoClient(getenv("MONGO_HOST"), int(getenv("MONGO_PORT")))
+        self._client = MongoClient(uri, server_api=ServerApi('1'))
         self._db = self._client[getenv("MONGO_DB")]
 
     def __enter__(self):
