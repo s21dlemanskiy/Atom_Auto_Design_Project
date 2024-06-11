@@ -5,7 +5,7 @@ from typing import Union
 import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from modules.routers import add_data, search
+from modules.routers import add_data, search, charts
 
 load_dotenv(find_dotenv())
 
@@ -33,6 +33,7 @@ logging.basicConfig(level=logging.INFO, filename="/var/log/restAPI.log", format=
 
 app.include_router(add_data.router)
 app.include_router(search.router)
+app.include_router(charts.router)
 
 logging.info('Routes loaded.')
 
