@@ -12,7 +12,9 @@ router = APIRouter(prefix="/charts", tags=["charts"], responses={400: {"descript
 def get_sentiment_chart_data(marks: List[str] = None,
                              models: List[str] = None,
                              body_types: List[str] = None,
-                             sources: List[str] = None) -> List[Tuple[str, int]]:
+                             sources: List[str] = None,
+                             skip_bad_sentiments: bool = True) -> List[Tuple[str, int]]:
+    ignore_values = ["SPEECH", "SKIP"]
     data = []
     with MangoDB() as client:
         graph_manager = GraphManager(client)
@@ -20,6 +22,8 @@ def get_sentiment_chart_data(marks: List[str] = None,
                         models=models,
                         body_types=body_types,
                         sources=sources)
+    if skip_bad_sentiments:
+        data = list(filter(lambda x: x[0] not in ignore_values, data))
     return data
 
 

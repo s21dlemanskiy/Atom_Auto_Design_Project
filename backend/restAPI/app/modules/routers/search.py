@@ -29,35 +29,6 @@ def search_by_words(words: List[str],
     return result
 
 
-@router.get("/get_cars")
-def get_all_marks_models_bodys() -> Dict[str, Dict[str, Set[str]]]:
-    result = {}
-    with MangoDB() as client:
-        client.get_collection("texts")
-        query = {"filter":{}, "projection": ["mark", "model", "body_type"]}
-        result_set = client.find(**query)
-        for row in result_set:
-            if row["mark"] not in result.keys():
-                result[row["mark"]] = dict()
-            mark_description = result[row["mark"]]
-            if row["model"] not in mark_description.keys():
-                mark_description[row["model"]] = set()
-            model_description = mark_description[row["model"]]
-            model_description.add(row["body_type"])
-    return result
-
-
-@router.get("/get_sources")
-def get_all_sources() -> Set[str]:
-    result = None
-    with MangoDB() as client:
-        client.get_collection("texts")
-        query = {"filter": {"other_data.source": {"$exists": True}}, "projection": ["other_data.source"]}
-        result_set = client.find(**query)
-        result = set(list(map(lambda row: row["other_data"].get("source", None), result_set)))
-    return result
-
-
 @router.post("/synonims")
 def get_synonyms(word: str) -> List[str]:
     word_lemma = DepparseTextProcessor.get_lemma(word)
