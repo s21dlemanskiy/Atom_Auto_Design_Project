@@ -16,7 +16,7 @@ class DepparseTextProcessor():
 
     @staticmethod
     def get_lemma(word: str) -> str:
-        nlp = stanza.Pipeline(lang='ru', processors='tokenize,lemma')
+        nlp = stanza.Pipeline(lang='ru', processors='tokenize,lemma', download_method=None)
         result = nlp(word).to_dict()
         if len(result) < 1 or len(result[0]) < 1:
             error(f"{word} returns empty result while lemmatization: {result}")
@@ -26,7 +26,7 @@ class DepparseTextProcessor():
     @classmethod
     def install_model(cls):
         info(f"Start loading models for {cls.__name__}....")
-        stanza.Pipeline(lang='ru', processors='tokenize,pos,lemma,ner,depparse')
+        stanza.download('ru')
         nltk_download('punkt')
         info(f"Loaded models for {cls.__name__}")
 
