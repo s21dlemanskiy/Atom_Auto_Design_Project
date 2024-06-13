@@ -46,27 +46,32 @@ class AdjectiveManager:
         query = {"key_word.lemma": {"$in": noun_lemmas}}
         result_set = self._client.find(query)
         self._client.get_collection("texts")
-        adj_skiped_count = 0
+        text_ids = []
         for adj in result_set:
             adj: Adjective = Adjective.from_dict(adj)
             text_id = adj.key_word.text_id
             if str(text_id) in result.keys():
                 result[str(text_id)]["adjectives"].append(adj)
                 continue
-            text: Optional[Dict[Any]] = self._client.find_one({"_id": text_id})
-            if text is None:
-                info(f"No text with id {text_id}. Adjectives from this text skiped")
-                continue
+            result[str(text_id)] = {"adjectives": [adj]}
+            text_ids.append(text_id)
+        query = {
+            "_id": {"$in": text_ids},
+            **({"mark": {"$in": marks}} if marks is not None else {}),
+            **({"model": {"$in": models}} if models is not None else {}),
+            **({"body_type": {"$in": bodys}} if bodys is not None else {}),
+            "other_data.text_sentiment.label": {"$exists": True, "$ne": "null"},
+            "other_data.source": {"$exists": True, "$ne": "null"}
+        }
+        texts: List[Dict[Any]] = self._client.find(query)
+        text_ids = set(text_ids)
+        text_ids2 = set()
+        for text in texts:
             text: Text = Text.from_dict(text)
-            if marks is not None and text.mark not in marks:
-                adj_skiped_count += 1
-                continue
-            if models is not None and text.model not in models:
-                adj_skiped_count += 1
-                continue
-            if bodys is not None and text.body_type not in bodys:
-                adj_skiped_count += 1
-                continue
-            result[str(text_id)] = {"adjectives": [adj], "text": text}
-        info(f"Skiped {adj_skiped_count} adjective, in fact of unsatisfying input params (mark, model, body))")
+            result[str(text.text_id)]["text"] = text
+            text_ids2.add(text.text_id)
+        text_id_without_text = (text_ids - text_ids2)
+        for id in text_id_without_text:
+            del result[str(id)]
+            warning(f"No text with id {id}. Adjectives from this text skiped")
         return result
