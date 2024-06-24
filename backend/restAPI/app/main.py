@@ -10,6 +10,7 @@ from modules.routers import add_data, search, charts, vars
 load_dotenv(find_dotenv())
 
 app = FastAPI()
+api_app = FastAPI()
 
 origins = [
     "*",
@@ -31,20 +32,21 @@ app.add_middleware(
 
 logging.basicConfig(level=logging.INFO, filename="restAPI.log", format="%(asctime)s %(levelname)s %(message)s")
 
-app.include_router(add_data.router)
-app.include_router(search.router)
-app.include_router(charts.router)
-app.include_router(vars.router)
+api_app.include_router(add_data.router)
+api_app.include_router(search.router)
+api_app.include_router(charts.router)
+api_app.include_router(vars.router)
 
 logging.info('Routes loaded.')
 
 
 
-@app.get("/")
+@api_app.get("/")
 def read_root():
     return {"Hello": "World"}
 
-@app.get("/ping")
+@api_app.get("/ping")
 def read_root():
     return "pong"
 
+app.mount("/api", api_app)
